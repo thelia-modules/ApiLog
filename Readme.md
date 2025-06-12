@@ -6,7 +6,7 @@ Add a short description here. You can also add a screenshot if needed.
 
 ### Manually
 
-* Copy the module into ```<thelia_root>/local/modules/``` directory and be sure that the name of the module is HttpClientLog.
+* Copy the module into ```<thelia_root>/local/modules/``` directory and be sure that the name of the module is ApiLog.
 * Activate it in your thelia administration panel
 
 ### Composer

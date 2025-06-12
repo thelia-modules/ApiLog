@@ -1,7 +1,0 @@
-services:
-  HttpClientLog\Service\LoggingHttpClient:
-    decorates: 'http_client'
-    decoration_priority: 5
-    arguments:
-      - '@HttpClientLog\Service\LoggingHttpClient.inner'
-      - '@monolog.logger.http_client'

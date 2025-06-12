@@ -2,7 +2,9 @@
 
 namespace ApiLog;
 
+use ApiLog\Extension\ApiLogExtension;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symfony\Component\Finder\Finder;
 use Thelia\Install\Database;
@@ -11,7 +13,7 @@ use Thelia\Module\BaseModule;
 class ApiLog extends BaseModule
 {
     /** @var string */
-    const DOMAIN_NAME = 'httpclientlog';
+    const DOMAIN_NAME = 'apilog';
 
     /*
      * You may now override BaseModuleInterface methods, such as:
@@ -19,6 +21,24 @@ class ApiLog extends BaseModule
      *
      * Have fun !
      */
+
+    public static function loadConfiguration(ContainerBuilder $containerBuilder): void
+    {
+        $extension = new ApiLogExtension();
+        $containerBuilder->registerExtension($extension);
+        $extension->load([
+            'channels' => ['api_log'],
+            'handlers' => [
+                'api_log' => [
+                    'type' => 'rotating_file',
+                    'max_files' => 10,
+                    'level' => 'info',
+                    'path' => '%kernel.logs_dir%/api_log.log',
+                    'channels' => ['api_log'],
+                ],
+            ],
+        ], $containerBuilder);
+    }
 
     /**
      * Defines how services are loaded in your modules

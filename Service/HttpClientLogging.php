@@ -3,33 +3,37 @@ namespace ApiLog\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use ApiLog\Logger\HttpClientLogger;
+use ApiLog\Logger\CustomLogger;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
-class LoggingHttpClient implements HttpClientInterface
+class HttpClientLogging implements HttpClientInterface
 {
     public function __construct(
         private readonly HttpClientInterface $client,
-        private readonly HttpClientLogger $logger
+        private readonly CustomLogger $logger,
     ) {}
 
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
-        $start = microtime(true);
-
         try {
+            $this->logger->logHttpRequest(
+                $method,
+                $url,
+                $options,
+            );
             $response = $this->client->request($method, $url, $options);
-            $duration = round((microtime(true) - $start) * 1000, 2); // ms
-            $this->logger->logResponse(
+            $duration = round((microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]) * 1000, 2);
+            $this->logger->logHttpResponse(
                 $method,
                 $url,
                 $response->getStatusCode(),
                 $duration,
                 $options,
             );
+
             return $response;
         } catch (\Throwable $e) {
-            $this->logger->logError($method, $url, $e, $options);
+            $this->logger->logHttpError($method, $url, $e, $options);
             throw $e;
         }
     }

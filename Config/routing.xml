@@ -6,19 +6,19 @@
 
     <!--
 
-    if a /admin/module/httpclientlog/ route is provided, a "Configuration" button will be displayed
+    if a /admin/module/apilog/ route is provided, a "Configuration" button will be displayed
     for the module in the module list. Clicking this button will invoke this route.
 
-    <route id="my_route_id" path="/admin/module/httpclientlog">
-        <default key="_controller">HttpClientLog\Full\Class\Name\Of\YourConfigurationController::methodName</default>
+    <route id="my_route_id" path="/admin/module/apilog">
+        <default key="_controller">ApiLog\Full\Class\Name\Of\YourConfigurationController::methodName</default>
     </route>
 
-    <route id="my_route_id" path="/admin/module/httpclientlog/route-name">
-        <default key="_controller">HttpClientLog\Full\Class\Name\Of\YourAdminController::methodName</default>
+    <route id="my_route_id" path="/admin/module/apilog/route-name">
+        <default key="_controller">ApiLog\Full\Class\Name\Of\YourAdminController::methodName</default>
     </route>
 
     <route id="my_route_id" path="/my/route/name">
-        <default key="_controller">HttpClientLog\Full\Class\Name\Of\YourOtherController::methodName</default>
+        <default key="_controller">ApiLog\Full\Class\Name\Of\YourOtherController::methodName</default>
     </route>
 
     ...add as many routes as required.

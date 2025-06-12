@@ -5,7 +5,7 @@
     <!--
     See propel documentation on http://propelorm.org for all information about schema file
 
-    <table name="product_rel" namespace="HttpClientLog\Model">
+    <table name="product_rel" namespace="ApiLog\Model">
         <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
         <column defaultValue="0" name="visible" required="true" type="TINYINT" />
         <column defaultValue="0" name="position" required="true" type="INTEGER" />
