@@ -21,12 +21,14 @@ class HttpClientLogging implements HttpClientInterface
                 $url,
                 $options,
             );
+            $start = microtime(true);
             $response = $this->client->request($method, $url, $options);
-            $duration = round((microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"]) * 1000, 2);
+            $statusCode = $response->getStatusCode();
+            $duration = round((microtime(true) - $start) * 1000, 2);
             $this->logger->logHttpResponse(
                 $method,
                 $url,
-                $response->getStatusCode(),
+                $statusCode,
                 $duration,
                 $options,
             );

@@ -22,14 +22,14 @@ class CustomLogger
         );
     }
 
-    public function logApiRequest(
+    public function logApipRequest(
         string $method,
         string $requestPath,
         array $options = []
     ): void
     {
         $this->logger->info(
-            '[API] REQUEST ' . $method . ' ' . $requestPath,
+            '[APIP] REQUEST ' . $method . ' ' . $requestPath,
             $options,
         );
     }
@@ -38,7 +38,7 @@ class CustomLogger
         string $method,
         string $url,
         int $statusCode,
-        string $duration,
+        float $duration,
         array $options = [],
     ): void
     {
@@ -52,17 +52,19 @@ class CustomLogger
         );
     }
 
-    public function logApiResponse(
+    public function logApipResponse(
         string $method,
         string $requestPath,
         int $statusCode,
+        ?float $duration,
         array $options = [],
     ): void
     {
         $this->logger->info(
-            '[API] RESPONSE ' . $method . ' ' . $requestPath,
+            '[APIP] RESPONSE ' . $method . ' ' . $requestPath,
             [
                 'status' => $statusCode,
+                'duration_ms' => $duration,
                 'options' => $options,
             ]
         );

@@ -18,20 +18,27 @@ final class ApiListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => ['apiRequest', EventPriorities::PRE_READ],
-            KernelEvents::RESPONSE => ['apiResponse', EventPriorities::POST_WRITE],
+            KernelEvents::REQUEST => ['apipRequest', EventPriorities::PRE_READ],
+            KernelEvents::RESPONSE => ['apipResponse', EventPriorities::POST_WRITE],
         ];
     }
 
-    public function apiRequest(RequestEvent $event): void
+    public function apipRequest(RequestEvent $event): void
     {
-        $method = $event->getRequest()->getMethod();
-        $requestPath = $event->getRequest()->getPathInfo();
-        $options = $event->getRequest()->query->all();
-        $prefix = explode('/', $requestPath, 3)[1];
+        if (!$event->isMainRequest()) {
+            return;
+        }
+        $event->getRequest()->attributes->set('_start_time', microtime(true));
 
-        if($prefix === 'api') {
-            $this->logger->logApiRequest(
+        $controller = $event->getRequest()->attributes->get('_controller');
+        $isAPIP = explode('.',  $controller)[0] === 'api_platform';
+
+        if($isAPIP) {
+            $method = $event->getRequest()->getMethod();
+            $requestPath = $event->getRequest()->getPathInfo();
+            $options = $event->getRequest()->query->all();
+
+            $this->logger->logApipRequest(
                 $method,
                 $requestPath,
                 $options,
@@ -39,20 +46,25 @@ final class ApiListener implements EventSubscriberInterface
         }
     }
 
-    public function apiResponse(ResponseEvent $event): void
+    public function apipResponse(ResponseEvent $event): void
     {
-        $method = $event->getRequest()->getMethod();
-        $requestPath = $event->getRequest()->getPathInfo();
-        $options = $event->getRequest()->query->all();
-        $statusCode = $event->getResponse()->getStatusCode();
-        $prefix = explode('/', $requestPath, 3)[1];
+        if (!$event->isMainRequest()) {
+            return;
+        }
 
-        if($prefix === 'api') {
-            $this->logger->logApiResponse(
-                $method,
-                $requestPath,
-                $statusCode,
-                $options,
+        $controller = $event->getRequest()->attributes->get('_controller');
+        $isAPIP = explode('.',  $controller)[0] === 'api_platform';
+
+        if($isAPIP) {
+            $start = $event->getRequest()->attributes->get('_start_time');
+            $duration = $start ? round((microtime(true) - $start) * 1000, 2) : null;
+
+            $this->logger->logApipResponse(
+                $event->getRequest()->getMethod(),
+                $event->getRequest()->getPathInfo(),
+                $event->getResponse()->getStatusCode(),
+                $duration,
+                $event->getRequest()->query->all(),
             );
         }
     }
