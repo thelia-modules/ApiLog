@@ -16,11 +16,11 @@ class HttpClientLogging implements HttpClientInterface
     public function request(string $method, string $url, array $options = []): ResponseInterface
     {
         try {
-            $this->logger->logHttpRequest(
-                $method,
-                $url,
-                $options,
-            );
+//            $this->logger->logHttpRequest(
+//                $method,
+//                $url,
+//                $options,
+//            );
             $start = microtime(true);
             $response = $this->client->request($method, $url, $options);
             $statusCode = $response->getStatusCode();

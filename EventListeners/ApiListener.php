@@ -30,20 +30,20 @@ final class ApiListener implements EventSubscriberInterface
         }
         $event->getRequest()->attributes->set('_start_time', microtime(true));
 
-        $controller = $event->getRequest()->attributes->get('_controller');
-        $isAPIP = explode('.',  $controller)[0] === 'api_platform';
-
-        if($isAPIP) {
-            $method = $event->getRequest()->getMethod();
-            $requestPath = $event->getRequest()->getPathInfo();
-            $options = $event->getRequest()->query->all();
-
-            $this->logger->logApipRequest(
-                $method,
-                $requestPath,
-                $options,
-            );
-        }
+//        $controller = $event->getRequest()->attributes->get('_controller');
+//        $isAPIP = explode('.',  $controller)[0] === 'api_platform';
+//
+//        if($isAPIP) {
+//            $method = $event->getRequest()->getMethod();
+//            $requestPath = $event->getRequest()->getPathInfo();
+//            $options = $event->getRequest()->query->all();
+//
+//            $this->logger->logApipRequest(
+//                $method,
+//                $requestPath,
+//                $options,
+//            );
+//        }
     }
 
     public function apipResponse(ResponseEvent $event): void
