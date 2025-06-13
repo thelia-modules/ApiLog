@@ -3,10 +3,14 @@
 namespace ApiLog;
 
 use ApiLog\Extension\ApiLogExtension;
+use ApiLog\Logger\CustomLogger;
+use ApiLog\Service\HttpClientLogging;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Thelia\Install\Database;
 use Thelia\Module\BaseModule;
 
@@ -51,6 +55,13 @@ class ApiLog extends BaseModule
             ->exclude([THELIA_MODULE_DIR . ucfirst(self::getModuleCode()). "/I18n/*"])
             ->autowire(true)
             ->autoconfigure(true);
+
+        $servicesConfigurator->set(HttpClientLogging::class, HttpClientLogging::class)
+            ->decorate(HttpClientInterface::class)
+            ->args([
+                new Reference(HttpClientLogging::class.'.inner'),
+                new Reference(CustomLogger::class),
+            ]);
     }
 
     /**
