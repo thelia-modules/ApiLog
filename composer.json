@@ -1,5 +1,5 @@
 {
-  "name": "your-vendor/http-client-log-module",
+  "name": "thelia/api-log-module",
   "description": "ApiLog module for Thelia",
   "license": "LGPL-3.0-or-later",
   "type": "thelia-module",
