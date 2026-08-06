@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiLog\Logger;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -12,26 +14,6 @@ class CustomLogger
         ContainerInterface $container,
     ) {
         $this->logger = $container->get('monolog.logger.api_log');
-    }
-
-    public function logHttpRequest(string $method, string $url, array $options = []): void
-    {
-        $this->logger->info(
-            '[HTTP] REQUEST ' . $method . ' ' . $url,
-            $options,
-        );
-    }
-
-    public function logApipRequest(
-        string $method,
-        string $requestPath,
-        array $options = []
-    ): void
-    {
-        $this->logger->info(
-            '[APIP] REQUEST ' . $method . ' ' . $requestPath,
-            $options,
-        );
     }
 
     public function logHttpResponse(
