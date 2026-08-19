@@ -25,11 +25,11 @@ class CustomLogger
     ): void
     {
         $this->logger->info(
-            '[HTTP] RESPONSE ' . $method . ' ' . $url,
+            '[HTTP] RESPONSE ' . $method . ' ' . LogSanitizer::sanitizeUrl($url),
             [
                 'status' => $statusCode,
                 'duration_ms' => $duration,
-                'options' => $options,
+                'options' => LogSanitizer::sanitizeOptions($options),
             ]
         );
     }
@@ -43,11 +43,11 @@ class CustomLogger
     ): void
     {
         $this->logger->info(
-            '[APIP] RESPONSE ' . $method . ' ' . $requestPath,
+            '[APIP] RESPONSE ' . $method . ' ' . LogSanitizer::sanitizeUrl($requestPath),
             [
                 'status' => $statusCode,
                 'duration_ms' => $duration,
-                'options' => $options,
+                'options' => LogSanitizer::sanitizeOptions($options),
             ]
         );
     }
@@ -55,11 +55,11 @@ class CustomLogger
     public function logHttpError(string $method, string $url, \Throwable $e, array $options = []): void
     {
         $this->logger->error(
-            '[HTTP] ERROR ' . $method . ' ' . $url,
+            '[HTTP] ERROR ' . $method . ' ' . LogSanitizer::sanitizeUrl($url),
             [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'options' => $options,
+                'message' => LogSanitizer::sanitizeText($e->getMessage()),
+                'trace' => LogSanitizer::sanitizeText($e->getTraceAsString()),
+                'options' => LogSanitizer::sanitizeOptions($options),
             ]
         );
     }
